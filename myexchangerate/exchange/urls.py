@@ -5,5 +5,6 @@ from . import views
 app_name = 'exchange'
 urlpatterns = [
     path('', views.HomeView.as_view(), name='home'),
-    path('<str:currency>/', views.chart, name='chart'),
+    path('time/<str:currency>/', views.time_chart, name='time_chart'),
+    path('<str:currency>/', views.full_chart, name='full_chart'),
 ]
