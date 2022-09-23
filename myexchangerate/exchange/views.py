@@ -1,5 +1,5 @@
 from datetime import datetime
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.utils import timezone
 from django.views import generic
 from .utils import get_rates, str_to_class, DESIRED_CURRENCIES
@@ -33,28 +33,22 @@ def full_chart(request, currency):
     return render(request, 'exchange/chart.html', context)
 
 
-def time(request, currency):
-    starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d').timestamp()
-    ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d').timestamp()
-    return redirect('exchange:time_chart', currency=currency, datestart=int(starting_date), datestop=int(ending_date))
-
-
-def time_chart(request, currency, datestart, datestop):
-    dsrt = datetime.fromtimestamp(datestart)
-    dstp = datetime.fromtimestamp(datestop)
+def time_chart(request, currency):
+    starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d')
+    ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d')
     iso_code = [iso_code for iso_code in DESIRED_CURRENCIES if DESIRED_CURRENCIES[iso_code] == currency.capitalize()].pop()
 
     context = get_rates(
         base="USD",
-        date_start=dsrt,
-        date_stop=dstp
+        date_start=starting_date,
+        date_stop=ending_date
     )
     if context:
         context['currency'] = currency
         return render(request, 'exchange/chart.html', context)
 
     c = str_to_class(currency).objects.filter(
-        exc_date__range=[dsrt.date().isoformat(), dstp.date().isoformat()]
+        exc_date__range=[starting_date.date().isoformat(), ending_date.date().isoformat()]
         ).values('exc_date', 'value')
 
     rates = [[item['exc_date'].timestamp()*1000, item['value']] for item in c]

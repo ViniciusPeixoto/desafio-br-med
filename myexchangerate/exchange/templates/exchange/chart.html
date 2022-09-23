@@ -81,7 +81,7 @@
         </script>
     </div>
     <br>
-    <form action="{% url 'exchange:time' currency %}" method="post">
+    <form action="{% url 'exchange:time_chart' currency %}" method="post">
       {% csrf_token %}
       <label for="starting-date">Choose a starting date:</label>
       <input type="date" id="starting-date"
