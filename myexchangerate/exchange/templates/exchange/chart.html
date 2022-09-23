@@ -2,6 +2,8 @@
 <!doctype html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>BR Med Exchange Rate Site | {{ currency }}</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{% static 'exchange/bootstrap.css' %}"></link>
@@ -13,7 +15,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="#">Exchange</a>
+          <a class="navbar-brand" href="{% url 'exchange:home' %}">Exchange</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -27,11 +29,15 @@
               <li class="nav-item">
                 <a class="nav-link" href="/admin/" target="_blank">Admin</a>
               </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Rates</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'exchange:full_chart' 'Euro' %}">Full EUR Rates</a>
+                  <a class="dropdown-item" href="{% url 'exchange:full_chart' 'Real' %}">Full BRL Rates</a>
+                  <a class="dropdown-item" href="{% url 'exchange:full_chart' 'Yen' %}">Full JPY Rates</a>
+                </div>
+              </li>
             </ul>
-            <form class="d-flex" abineguid="A5B896DC4AB949D988E684BD9E84D823">
-              <input class="form-control me-sm-2" type="text" placeholder="Search">
-              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-            </form>
           </div>
         </div>
       </nav>
@@ -50,9 +56,6 @@
                 },
                 yAxis: {
                     min: 0,
-                    title: {
-                        text: 'USD Value',
-                    },
                     plotOptions: {
                         line: {
                             dataLabels: {
@@ -62,7 +65,7 @@
                     },
                 },
                 series: [{
-                    name: '{{ currency }}',
+                    name: '{{ iso_code }}',
                     data: [
                         {% for entry in rates %}[{{ entry.0 }}, {{ entry.1}}]{% if not forloop.last %}, {% endif %}{% endfor %}
                     ],
@@ -77,9 +80,20 @@
             });
         </script>
     </div>
-    
-</body>
-</html>
-
-
-
+    <br>
+    <form action="{% url 'exchange:time' currency %}" method="post">
+      {% csrf_token %}
+      <label for="starting-date">Choose a starting date:</label>
+      <input type="date" id="starting-date"
+          name="starting-date" min="1999-01-04T00:00">
+      <label for="ending-date">Choose a ending date:</label>
+      <input type="date" id="ending-date"
+          name="ending-date" min="1999-01-04T00:00">
+      <input type="submit" class="btn btn-primary btn-sm">
+    </form>
+    {% if error %}
+      {{ error }}
+    {% endif %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+  </body>
+  </html>
