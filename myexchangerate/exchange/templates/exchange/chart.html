@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BR Med Exchange Rate Site | {{ currency }}</title>
+    <title>BR Med Exchange Rate Site | {{ iso_code }}</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{% static 'exchange/bootstrap.css' %}"></link>
 
@@ -84,15 +84,13 @@
     <form action="{% url 'exchange:time_chart' currency %}" method="post">
       {% csrf_token %}
       <label for="starting-date">Choose a starting date:</label>
-      <input type="date" id="starting-date"
-          name="starting-date" min="1999-01-04T00:00">
-      <label for="ending-date">Choose a ending date:</label>
-      <input type="date" id="ending-date"
-          name="ending-date" min="1999-01-04T00:00">
-      <input type="submit" class="btn btn-primary btn-sm">
+      <input type="date" id="starting-date" name="starting-date" min="1999-01-04T00:00">
+      &ensp;<label for="ending-date">Choose a ending date:</label>
+      <input type="date" id="ending-date" name="ending-date" min="1999-01-04T00:00">
+      &ensp;<input type="submit" class="btn btn-primary btn-sm">
     </form>
     {% if error %}
-      {{ error }}
+      <p><strong>{{ error }}</strong></p>
     {% endif %}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
   </body>

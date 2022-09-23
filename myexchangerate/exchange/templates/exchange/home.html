@@ -40,8 +40,8 @@
 <h1>BR MED EXCHANGE RATE SITE</h1>
 <h2>Today's exchange rates (against USD)</h2>
 {% if response %}
-    <ul>
-      <table class="table table-hover">
+    <div style="margin: auto">
+      <table class="table table-hover" style="width: 95%">
         <thead>
           <tr>
             <th scope="col">Currency</th>
@@ -55,7 +55,7 @@
         </tr>
       {% endfor %}
       </table>
-    </ul>
+    </div>
 {% else %}
     <p>No rates are available.</p>
 {% endif %}
