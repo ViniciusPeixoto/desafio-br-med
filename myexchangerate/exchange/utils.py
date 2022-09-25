@@ -48,7 +48,8 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
     if date_stop > datetime.today().date():
         date_stop = datetime.today().date()
 
-    date_list = bdate_range(date_start, date_stop).to_list()
+    date_list = bdate_range(date_start, date_stop).to_list() \
+        if date_start <= date_stop else bdate_range(date_stop, date_start).to_list()
     if len(date_list) > 5:
         return {'error': "Dates are too far apart. Choose a narrower span."}
 
