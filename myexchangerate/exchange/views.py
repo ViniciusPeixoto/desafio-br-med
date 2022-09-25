@@ -53,6 +53,10 @@ def time_chart(request, currency):
         ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d').date()
     except ValueError:
         ending_date = None
+
+    if starting_date > ending_date:
+        starting_date, ending_date = ending_date, starting_date
+
     iso_code = [iso_code for iso_code in DESIRED_CURRENCIES if DESIRED_CURRENCIES[iso_code] == currency.capitalize()].pop()
 
     context = get_rates(
