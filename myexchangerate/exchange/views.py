@@ -1,6 +1,5 @@
 from datetime import datetime
 from django.shortcuts import render
-from django.utils import timezone
 from django.views import generic
 from .utils import get_rates, str_to_class, DESIRED_CURRENCIES
 from .models import Euro, Real, Yen
@@ -12,7 +11,7 @@ class HomeView(generic.ListView):
 
     # Home page will show latest exchange rates for desired currencies.
     def get_queryset(self):
-        get_rates(base="USD", date_start=timezone.now())
+        get_rates(base="USD", date_start=datetime.today())
         return [
             (iso_code, str_to_class(currency).objects.order_by('exc_date').last().value) for iso_code, currency in DESIRED_CURRENCIES.items()
         ]

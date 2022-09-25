@@ -68,8 +68,8 @@ class UtilsTests(TestCase):
         time_slicing() should check for time range above 5 business days and return an error.
         """
 
-        date_start = datetime.today().date() - timedelta(days=9)
-        date_stop = datetime.today().date()
+        date_start = datetime.today() - timedelta(days=9)
+        date_stop = datetime.today()
         request_result = utils.time_slicing(date_start=date_start, date_stop=date_stop)
         expected_result = {'error': "Dates are too far apart. Choose a narrower span."}
 
@@ -83,10 +83,10 @@ class UtilsTests(TestCase):
         time_slicing() should treat future dates as the latest day available.
         """
 
-        yesterday = datetime.today().date() - timedelta(days=1)
-        the_day_after_tomorrow = datetime.today().date() + timedelta(days=2)
+        yesterday = datetime.today() - timedelta(days=1)
+        the_day_after_tomorrow = datetime.today() + timedelta(days=2)
         request_result = utils.time_slicing(date_start=yesterday, date_stop=the_day_after_tomorrow)
-        expected_result = utils.time_slicing(date_start=yesterday, date_stop=datetime.today().date())
+        expected_result = utils.time_slicing(date_start=yesterday, date_stop=datetime.today())
 
         self.assertEqual(
             request_result,
@@ -98,8 +98,8 @@ class UtilsTests(TestCase):
         time_slicing() should work even if date_stop < date_start.
         """
 
-        the_day_before_yesterday = datetime.today().date() - timedelta(days=2)
-        today = datetime.today().date()
+        the_day_before_yesterday = datetime.today() - timedelta(days=2)
+        today = datetime.today()
         request_result = utils.time_slicing(date_start=today, date_stop=the_day_before_yesterday)
         expected_result = utils.time_slicing(date_start=the_day_before_yesterday, date_stop=today)
 
