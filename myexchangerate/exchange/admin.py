@@ -4,21 +4,21 @@ from .models import Euro, Real, Yen
 
 
 class EuroAdmin(admin.ModelAdmin):
-    fields = ['exc_date', 'value']
-    list_display = ('iso_code', 'exc_date', 'value')
-    list_filter = ['exc_date']
+    fields = ["exc_date", "value"]
+    list_display = ("iso_code", "exc_date", "value")
+    list_filter = ["exc_date"]
 
 
 class RealAdmin(admin.ModelAdmin):
-    fields = ['exc_date', 'value']
-    list_display = ('iso_code', 'exc_date', 'value')
-    list_filter = ['exc_date']
+    fields = ["exc_date", "value"]
+    list_display = ("iso_code", "exc_date", "value")
+    list_filter = ["exc_date"]
 
 
 class YenAdmin(admin.ModelAdmin):
-    fields = ['exc_date', 'value']
-    list_display = ('iso_code', 'exc_date', 'value')
-    list_filter = ['exc_date']
+    fields = ["exc_date", "value"]
+    list_display = ("iso_code", "exc_date", "value")
+    list_filter = ["exc_date"]
 
 
 admin.site.register(Euro, EuroAdmin)

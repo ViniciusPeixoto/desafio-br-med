@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Euro(models.Model):
-    iso_code = models.CharField(max_length=3, default='EUR', editable=False)
-    exc_date = models.DateTimeField('Exchange rate date')
+    iso_code = models.CharField(max_length=3, default="EUR", editable=False)
+    exc_date = models.DateTimeField("Exchange rate date")
     value = models.FloatField(default=1)
 
     def __str__(self):
@@ -11,8 +11,8 @@ class Euro(models.Model):
 
 
 class Real(models.Model):
-    iso_code = models.CharField(max_length=3, default='BRL', editable=False)
-    exc_date = models.DateTimeField('Exchange rate date')
+    iso_code = models.CharField(max_length=3, default="BRL", editable=False)
+    exc_date = models.DateTimeField("Exchange rate date")
     value = models.FloatField(default=1)
 
     def __str__(self):
@@ -20,8 +20,8 @@ class Real(models.Model):
 
 
 class Yen(models.Model):
-    iso_code = models.CharField(max_length=3, default='JPY', editable=False)
-    exc_date = models.DateTimeField('Exchange rate date')
+    iso_code = models.CharField(max_length=3, default="JPY", editable=False)
+    exc_date = models.DateTimeField("Exchange rate date")
     value = models.FloatField(default=1)
 
     def __str__(self):
