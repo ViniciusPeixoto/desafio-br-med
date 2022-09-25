@@ -67,7 +67,7 @@ def time_chart(request, currency):
     if ending_date is None:
         ending_date = starting_date
     c = str_to_class(currency).objects.filter(
-        exc_date__range=[starting_date.date().isoformat(), ending_date.date().isoformat()]
+        exc_date__range=[starting_date.isoformat(), ending_date.isoformat()]
         ).values('exc_date', 'value')
 
     # Highcharts uses a list of lists, with inner lists having date in timestamp (milliseconds) and value.

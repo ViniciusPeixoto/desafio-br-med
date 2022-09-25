@@ -45,8 +45,8 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
         vat_rates.append(get_vat_rates(base=base, date=date_start))
         return vat_rates
 
-    if date_stop > datetime.today():
-        date_stop = datetime.today()
+    if date_stop > datetime.today().date():
+        date_stop = datetime.today().date()
 
     date_list = bdate_range(date_start, date_stop).to_list()
     if len(date_list) > 5:
