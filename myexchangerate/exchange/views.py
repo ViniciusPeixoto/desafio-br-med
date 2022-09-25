@@ -1,6 +1,5 @@
 from datetime import datetime
 from django.shortcuts import render
-from django.utils import timezone
 from django.views import generic
 from .utils import get_rates, str_to_class, DESIRED_CURRENCIES
 from .models import Euro, Real, Yen
@@ -12,7 +11,7 @@ class HomeView(generic.ListView):
 
     # Home page will show latest exchange rates for desired currencies.
     def get_queryset(self):
-        get_rates(base="USD", date_start=timezone.now())
+        get_rates(base="USD", date_start=datetime.today())
         return [
             (iso_code, str_to_class(currency).objects.order_by('exc_date').last().value) for iso_code, currency in DESIRED_CURRENCIES.items()
         ]
@@ -44,8 +43,24 @@ def time_chart(request, currency):
     """
     Display a line chart containing rates between dates input by the user.
     """
-    starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d')
-    ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d')
+
+    try:
+        starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d')
+    except ValueError:
+        starting_date = None
+    try:
+        ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d')
+    except ValueError:
+        if starting_date is not None:
+            ending_date = starting_date
+        else:
+            ending_date = None
+
+    if (starting_date is not None and
+            ending_date is not None and
+            starting_date > ending_date):
+        starting_date, ending_date = ending_date, starting_date
+
     iso_code = [iso_code for iso_code in DESIRED_CURRENCIES if DESIRED_CURRENCIES[iso_code] == currency.capitalize()].pop()
 
     context = get_rates(
@@ -58,7 +73,7 @@ def time_chart(request, currency):
         return render(request, 'exchange/chart.html', context)
 
     c = str_to_class(currency).objects.filter(
-        exc_date__range=[starting_date.date().isoformat(), ending_date.date().isoformat()]
+        exc_date__range=[starting_date.isoformat(), ending_date.isoformat()]
         ).values('exc_date', 'value')
 
     # Highcharts uses a list of lists, with inner lists having date in timestamp (milliseconds) and value.
