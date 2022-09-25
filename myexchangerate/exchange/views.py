@@ -44,8 +44,15 @@ def time_chart(request, currency):
     """
     Display a line chart containing rates between dates input by the user.
     """
-    starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d')
-    ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d')
+
+    try:
+        starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d').date()
+    except ValueError:
+        starting_date = None
+    try:
+        ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d').date()
+    except ValueError:
+        ending_date = None
     iso_code = [iso_code for iso_code in DESIRED_CURRENCIES if DESIRED_CURRENCIES[iso_code] == currency.capitalize()].pop()
 
     context = get_rates(
@@ -57,6 +64,8 @@ def time_chart(request, currency):
         context['currency'] = currency
         return render(request, 'exchange/chart.html', context)
 
+    if ending_date is None:
+        ending_date = starting_date
     c = str_to_class(currency).objects.filter(
         exc_date__range=[starting_date.date().isoformat(), ending_date.date().isoformat()]
         ).values('exc_date', 'value')
