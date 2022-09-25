@@ -41,12 +41,15 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
     if date_start is None:
         return {'error': "Please, choose a starting date."}
 
+    if date_start > datetime.today():
+        return {'error': "Starting date is in the future. Choose a starting date up to today."}
+
     if date_stop is None or date_start == date_stop:
         vat_rates.append(get_vat_rates(base=base, date=date_start))
         return vat_rates
 
-    if date_stop > datetime.today().date():
-        date_stop = datetime.today().date()
+    if date_stop > datetime.today():
+        date_stop = datetime.today()
 
     date_list = bdate_range(date_start, date_stop).to_list() \
         if date_start <= date_stop else bdate_range(date_stop, date_start).to_list()

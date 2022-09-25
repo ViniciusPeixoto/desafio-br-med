@@ -46,15 +46,20 @@ def time_chart(request, currency):
     """
 
     try:
-        starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d').date()
+        starting_date = datetime.strptime(request.POST['starting-date'], '%Y-%m-%d')
     except ValueError:
         starting_date = None
     try:
-        ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d').date()
+        ending_date = datetime.strptime(request.POST['ending-date'], '%Y-%m-%d')
     except ValueError:
-        ending_date = None
+        if starting_date is not None:
+            ending_date = starting_date
+        else:
+            ending_date = None
 
-    if starting_date > ending_date:
+    if (starting_date is not None and
+            ending_date is not None and
+            starting_date > ending_date):
         starting_date, ending_date = ending_date, starting_date
 
     iso_code = [iso_code for iso_code in DESIRED_CURRENCIES if DESIRED_CURRENCIES[iso_code] == currency.capitalize()].pop()
@@ -68,8 +73,6 @@ def time_chart(request, currency):
         context['currency'] = currency
         return render(request, 'exchange/chart.html', context)
 
-    if ending_date is None:
-        ending_date = starting_date
     c = str_to_class(currency).objects.filter(
         exc_date__range=[starting_date.isoformat(), ending_date.isoformat()]
         ).values('exc_date', 'value')
