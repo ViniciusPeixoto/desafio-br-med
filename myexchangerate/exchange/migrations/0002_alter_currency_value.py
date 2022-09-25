@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange', '0001_initial'),
+        ("exchange", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='currency',
-            name='value',
+            model_name="currency",
+            name="value",
             field=models.FloatField(default=1),
         ),
     ]

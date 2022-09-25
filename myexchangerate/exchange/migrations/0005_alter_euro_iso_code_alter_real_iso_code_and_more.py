@@ -6,23 +6,23 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange', '0004_euro_iso_code_real_iso_code_yen_iso_code'),
+        ("exchange", "0004_euro_iso_code_real_iso_code_yen_iso_code"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='euro',
-            name='iso_code',
-            field=models.CharField(default='EUR', editable=False, max_length=3),
+            model_name="euro",
+            name="iso_code",
+            field=models.CharField(default="EUR", editable=False, max_length=3),
         ),
         migrations.AlterField(
-            model_name='real',
-            name='iso_code',
-            field=models.CharField(default='BRL', editable=False, max_length=3),
+            model_name="real",
+            name="iso_code",
+            field=models.CharField(default="BRL", editable=False, max_length=3),
         ),
         migrations.AlterField(
-            model_name='yen',
-            name='iso_code',
-            field=models.CharField(default='JPY', editable=False, max_length=3),
+            model_name="yen",
+            name="iso_code",
+            field=models.CharField(default="JPY", editable=False, max_length=3),
         ),
     ]

@@ -8,12 +8,8 @@ from pandas import bdate_range
 from .models import Euro, Real, Yen
 
 # What currencies the app will support.
-DESIRED_CURRENCIES = {
-    'EUR': 'Euro',
-    'BRL': 'Real',
-    'JPY': 'Yen'
-}
-BASE_CURRENCY = 'USD'
+DESIRED_CURRENCIES = {"EUR": "Euro", "BRL": "Real", "JPY": "Yen"}
+BASE_CURRENCY = "USD"
 
 
 def get_vat_rates(date: datetime, base=BASE_CURRENCY):
@@ -21,13 +17,13 @@ def get_vat_rates(date: datetime, base=BASE_CURRENCY):
     Make a GET request at VAT Comply's Exchange Rates API.
     """
 
-    params = {'base': base, 'date': date.date().isoformat()}
+    params = {"base": base, "date": date.date().isoformat()}
     vat_rates = requests.get("https://api.vatcomply.com/rates", params=params)
 
     if vat_rates.status_code != 200:
-        return {'error': "API request failed."}
+        return {"error": "API request failed."}
 
-    return json.loads(vat_rates.content.decode('utf-8'))
+    return json.loads(vat_rates.content.decode("utf-8"))
 
 
 def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
@@ -39,10 +35,12 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
     vat_rates = []
 
     if date_start is None:
-        return {'error': "Please, choose a starting date."}
+        return {"error": "Please, choose a starting date."}
 
     if date_start > datetime.today():
-        return {'error': "Starting date is in the future. Choose a starting date up to today."}
+        return {
+            "error": "Starting date is in the future. Choose a starting date up to today."
+        }
 
     if date_stop is None or date_start == date_stop:
         vat_rates.append(get_vat_rates(base=base, date=date_start))
@@ -51,10 +49,13 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
     if date_stop > datetime.today():
         date_stop = datetime.today()
 
-    date_list = bdate_range(date_start, date_stop).to_list() \
-        if date_start <= date_stop else bdate_range(date_stop, date_start).to_list()
+    date_list = (
+        bdate_range(date_start, date_stop).to_list()
+        if date_start <= date_stop
+        else bdate_range(date_stop, date_start).to_list()
+    )
     if len(date_list) > 5:
-        return {'error': "Dates are too far apart. Choose a narrower span."}
+        return {"error": "Dates are too far apart. Choose a narrower span."}
 
     for date in date_list:
         vat_rates.append(get_vat_rates(base=base, date=date))
@@ -76,9 +77,15 @@ def save_current_rates(desired_rates, rates_date):
     """
 
     for iso_code, value in desired_rates.items():
-        c = str_to_class(DESIRED_CURRENCIES[iso_code]).objects.filter(exc_date=rates_date).last()
+        c = (
+            str_to_class(DESIRED_CURRENCIES[iso_code])
+            .objects.filter(exc_date=rates_date)
+            .last()
+        )
         if not c:
-            c = str_to_class(DESIRED_CURRENCIES[iso_code])(exc_date=rates_date, value=value)
+            c = str_to_class(DESIRED_CURRENCIES[iso_code])(
+                exc_date=rates_date, value=value
+            )
             c.save()
 
 
@@ -90,12 +97,13 @@ def get_rates(base, date_start, date_stop=None):
     list_vat_rates = time_slicing(date_start=date_start, date_stop=date_stop, base=base)
 
     for vat_rate in list_vat_rates:
-        if 'error' in vat_rate:
+        if "error" in vat_rate:
             return list_vat_rates
 
-        rates_date = vat_rate['date']
+        rates_date = vat_rate["date"]
         desired_rates = {
-            iso_code: "{:.3f}".format(vat_rate['rates'][iso_code]) for iso_code in DESIRED_CURRENCIES.keys()
+            iso_code: "{:.3f}".format(vat_rate["rates"][iso_code])
+            for iso_code in DESIRED_CURRENCIES.keys()
         }
         save_current_rates(desired_rates, rates_date)
 

@@ -6,35 +6,59 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('exchange', '0002_alter_currency_value'),
+        ("exchange", "0002_alter_currency_value"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Euro',
+            name="Euro",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('exc_date', models.DateTimeField(verbose_name='Exchange rate date')),
-                ('value', models.FloatField(default=1)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("exc_date", models.DateTimeField(verbose_name="Exchange rate date")),
+                ("value", models.FloatField(default=1)),
             ],
         ),
         migrations.CreateModel(
-            name='Real',
+            name="Real",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('exc_date', models.DateTimeField(verbose_name='Exchange rate date')),
-                ('value', models.FloatField(default=1)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("exc_date", models.DateTimeField(verbose_name="Exchange rate date")),
+                ("value", models.FloatField(default=1)),
             ],
         ),
         migrations.CreateModel(
-            name='Yen',
+            name="Yen",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('exc_date', models.DateTimeField(verbose_name='Exchange rate date')),
-                ('value', models.FloatField(default=1)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("exc_date", models.DateTimeField(verbose_name="Exchange rate date")),
+                ("value", models.FloatField(default=1)),
             ],
         ),
         migrations.DeleteModel(
-            name='Currency',
+            name="Currency",
         ),
     ]
