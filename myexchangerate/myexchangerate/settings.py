@@ -10,7 +10,6 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import dj_database_url
 import os
 from pathlib import Path
 
@@ -87,13 +86,31 @@ DATABASES = {
     }
 }
 
-MAX_CONN_AGE = 600
+POSTGRES_DB = os.environ.get("POSTGRES_DB")  # database name
+POSTGRES_PASSWORD = os.environ.get("POSTGRES_PASSWORD")  # database user password
+POSTGRES_USER = os.environ.get("POSTGRES_USER")  # database username
+POSTGRES_HOST = os.environ.get("POSTGRES_HOST")  # database host
+POSTGRES_PORT = os.environ.get("POSTGRES_PORT")  # database port
 
-if "DATABASE_URL" in os.environ:
-    # Configure Django for DATABASE_URL environment variable.
-    DATABASES["default"] = dj_database_url.config(
-        conn_max_age=MAX_CONN_AGE, ssl_require=False)
+POSTGRES_READY = (
+    POSTGRES_DB is not None
+    and POSTGRES_PASSWORD is not None
+    and POSTGRES_USER is not None
+    and POSTGRES_HOST is not None
+    and POSTGRES_PORT is not None
+)
 
+if POSTGRES_READY:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": POSTGRES_DB,
+            "USER": POSTGRES_USER,
+            "PASSWORD": POSTGRES_PASSWORD,
+            "HOST": POSTGRES_HOST,
+            "PORT": POSTGRES_PORT,
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
