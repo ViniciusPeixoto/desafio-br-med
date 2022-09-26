@@ -1,1 +1,1 @@
-web: gunicorn myexchangerate.wsgi
+web: gunicorn myexchangerate.wsgi --log-file
