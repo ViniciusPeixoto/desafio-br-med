@@ -9,6 +9,7 @@ dj-database-url==1.0.0
 Django==4.1.1
 django-dotenv==1.4.2
 flake8==5.0.4
+gunicorn==20.1.0
 idna==3.4
 mccabe==0.7.0
 mypy-extensions==0.4.3

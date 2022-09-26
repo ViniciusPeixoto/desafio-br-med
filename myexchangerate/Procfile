@@ -1,1 +1,1 @@
-web: waitress-serve --port=$PORT --asyncore-use-poll --backlog=4096 myexchangerate.wsgi:application
+web: gunicorn myexchangerate.wsgi
