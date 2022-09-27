@@ -35,12 +35,12 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
     vat_rates = []
 
     if date_start is None:
-        return {"error": "Please, choose a starting date."}
+        return [{"error": "Please, choose a starting date."}]
 
     if date_start > datetime.today():
-        return {
+        return [{
             "error": "Starting date is in the future. Choose a starting date up to today."
-        }
+        }]
 
     if date_stop is None or date_start == date_stop:
         vat_rates.append(get_vat_rates(base=base, date=date_start))
@@ -55,7 +55,7 @@ def time_slicing(date_start, date_stop=None, base=BASE_CURRENCY):
         else bdate_range(date_stop, date_start).to_list()
     )
     if len(date_list) > 5:
-        return {"error": "Dates are too far apart. Choose a narrower span."}
+        return [{"error": "Dates are too far apart. Choose a narrower span."}]
 
     for date in date_list:
         vat_rates.append(get_vat_rates(base=base, date=date))
@@ -99,7 +99,7 @@ def get_rates(base, date_start, date_stop=None):
     desired_rates = {}
     for vat_rate in list_vat_rates:
         if "error" in vat_rate:
-            return list_vat_rates
+            return vat_rate
 
         rates_date = vat_rate["date"]
         for iso_code in DESIRED_CURRENCIES.keys():
