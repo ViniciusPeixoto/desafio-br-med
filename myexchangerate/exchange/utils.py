@@ -96,15 +96,16 @@ def get_rates(base, date_start, date_stop=None):
 
     list_vat_rates = time_slicing(date_start=date_start, date_stop=date_stop, base=base)
 
+    desired_rates = {}
     for vat_rate in list_vat_rates:
         if "error" in vat_rate:
             return list_vat_rates
 
         rates_date = vat_rate["date"]
-        desired_rates = {
-            iso_code: "{:.3f}".format(vat_rate["rates"][iso_code])
-            for iso_code in DESIRED_CURRENCIES.keys()
-        }
+        for iso_code in DESIRED_CURRENCIES.keys():
+            rate = vat_rate["rates"].get(iso_code)
+            if rate:
+                desired_rates[iso_code] = "{:.3f}".format(rate)
         save_current_rates(desired_rates, rates_date)
 
     return {}

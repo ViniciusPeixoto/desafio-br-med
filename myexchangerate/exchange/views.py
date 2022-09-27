@@ -86,6 +86,10 @@ def time_chart(request, currency):
         )
         .values("exc_date", "value")
     )
+    if not c:
+        context["currency"] = currency
+        context["error"] = f"There are no {currency.capitalize()} rates to display."
+        return render(request, "exchange/chart.html", context)
 
     # Highcharts uses a list of lists, with inner lists having date in timestamp (milliseconds) and value.
     # The list have to be sorted by timestamp.
